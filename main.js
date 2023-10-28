@@ -26,15 +26,18 @@ client.on('ready', async () => {
 })
 
 client.on("messageCreate", async function (message) {
-    if (!message.content || !message || !message.author || !message.author.id || !message.author.bot || message.author.id !== client.user.id || !message.guildId || message.guildId !== guild) return
+    if (!message.content || !message || !message.author || !message.author.id || message.author.id !== client.user.id || !message.guildId || message.guildId !== guild) return
     let m = message.content.split(" ")
     if (m[0] == commande) {
         const muter = message.mentions.users.first();
         if (muter === undefined) {
-            return; // Do not proceed, there is no user.
+            return;
         }
-        if(!temps.m[1]) return;
-        client.channels.cache.get(message.channel.id).send(`-tempmute <@${muter.id}> ${m[1]} ${temps.m[1]}`)
-        setTimeout(() => message.delete(), 2000)
+        let raison = m[m.length - 1].replace(/ /g, '')
+        if (!temps[raison]) return console.log("aucune raison")
+        await message.delete(), 2000
+        await client.channels.cache.get(message.channel.id).send(`-tempmute <@${muter.id}> ${temps[raison]}m ${raison}`)
     }
 })
+
+client.login(tokenself)
